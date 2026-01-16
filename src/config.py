@@ -22,7 +22,8 @@ class Config:
         # Email settings
         self.sendgrid_api_key = os.getenv('SENDGRID_API_KEY')
         self.recipient_email = os.getenv('RECIPIENT_EMAIL', 'chen.kelvin822@gmail.com')
-        self.sender_email = os.getenv('SENDER_EMAIL', 'noreply@snowflake-ci.com')
+        # Use verified email as sender (required by SendGrid)
+        self.sender_email = os.getenv('SENDER_EMAIL', 'chen.kelvin822@gmail.com')
         self.sender_name = os.getenv('SENDER_NAME', 'Snowflake CI Monitor')
 
         # Collection settings
