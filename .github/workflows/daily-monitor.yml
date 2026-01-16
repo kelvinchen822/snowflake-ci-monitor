@@ -29,6 +29,11 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Initialize database (first run only)
+        run: |
+          python main.py --init
+        continue-on-error: true
+
       - name: Run monitoring pipeline
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
