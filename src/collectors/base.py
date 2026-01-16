@@ -33,6 +33,15 @@ class BaseCollector(ABC):
         self.competitor_name = competitor_name
         self.source_url = source_url
 
+        # Simple logger that prints to stdout
+        import logging
+        self.logger = logging.getLogger(f"{self.__class__.__name__}_{competitor_name}")
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(logging.Formatter('%(message)s'))
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
+
     @abstractmethod
     def collect(self) -> List[Dict]:
         """

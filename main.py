@@ -196,6 +196,25 @@ class CIMonitor:
                 # Find competitor by name
                 competitor_name = signal_data.get('competitor_name', '')
 
+                # For tech news and PR Newswire, match to competitors by keyword
+                if competitor_name in ['Tech News', 'PR Newswire']:
+                    text_to_search = f"{signal_data.get('title', '')} {signal_data.get('description', '')}".lower()
+
+                    # Try to match to a competitor by keywords
+                    matched_competitor = None
+                    for comp_config in config.competitors:
+                        keywords = comp_config.get('keywords', [])
+                        if any(keyword.lower() in text_to_search for keyword in keywords):
+                            matched_competitor = comp_config['name']
+                            break
+
+                    if not matched_competitor:
+                        # Skip signals that don't match any competitor
+                        continue
+
+                    competitor_name = matched_competitor
+                    signal_data['competitor_name'] = competitor_name
+
                 if not competitor_name:
                     print(f"Warning: No competitor name for signal: {signal_data['title'][:50]}")
                     continue

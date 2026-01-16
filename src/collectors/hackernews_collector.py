@@ -19,9 +19,8 @@ class HackerNewsCollector(BaseCollector):
             lookback_days: Number of days to look back
         """
         super().__init__(
-            source_url='https://hn.algolia.com/api/v1',
-            source_type='hackernews',
-            competitor_name=competitor_name
+            competitor_name=competitor_name,
+            source_url='https://hn.algolia.com/api/v1'
         )
         self.keywords = keywords
         self.lookback_days = lookback_days

@@ -20,9 +20,8 @@ class NewsAPICollector(BaseCollector):
             lookback_days: Number of days to look back
         """
         super().__init__(
-            source_url='https://newsapi.org/v2',
-            source_type='newsapi',
-            competitor_name=competitor_name
+            competitor_name=competitor_name,
+            source_url='https://newsapi.org/v2'
         )
         self.api_key = api_key
         self.keywords = keywords
