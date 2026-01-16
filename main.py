@@ -123,6 +123,19 @@ class CIMonitor:
                     print(f"Warning: Could not find competitor '{competitor_name}' for signal: {signal_data['title'][:50]}")
                     continue
 
+                # Filter by keywords - only store signals that mention competitor keywords
+                comp_config = next((c for c in config.competitors if c['name'] == competitor_name), None)
+                if comp_config:
+                    keywords = comp_config.get('keywords', [])
+                    text_to_search = f"{signal_data.get('title', '')} {signal_data.get('description', '')}".lower()
+
+                    # Check if any keyword appears in title or description
+                    keyword_found = any(keyword.lower() in text_to_search for keyword in keywords)
+
+                    if not keyword_found:
+                        # Skip signals that don't match competitor keywords
+                        continue
+
                 # Create signal
                 signal = Signal(
                     competitor_id=competitor.id,
