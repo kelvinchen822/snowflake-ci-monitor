@@ -34,12 +34,10 @@ jobs:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
-          if [ ! -f data/intelligence.db ]; then
-            echo "Database not found, initializing..."
-            python main.py --init
-          else
-            echo "Database already exists, skipping initialization"
-          fi
+          # Remove old database to pick up new RSS feeds
+          rm -f data/intelligence.db
+          echo "Initializing database with latest configuration..."
+          python main.py --init
 
       - name: Run monitoring pipeline
         env:
