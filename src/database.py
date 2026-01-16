@@ -151,12 +151,21 @@ class Database:
 
     def get_recent_signals(self, hours: int = 24) -> List[Signal]:
         """Get signals from the last N hours"""
+        from sqlalchemy.orm import joinedload
+
         session = self.get_session()
         try:
             cutoff = datetime.utcnow() - timedelta(hours=hours)
-            signals = session.query(Signal).filter(
+            signals = session.query(Signal).options(
+                joinedload(Signal.competitor)
+            ).filter(
                 Signal.discovered_date >= cutoff
             ).order_by(Signal.discovered_date.desc()).all()
+
+            # Expunge signals from session so they can be used after session closes
+            for signal in signals:
+                session.expunge(signal)
+
             return signals
         finally:
             session.close()
