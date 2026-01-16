@@ -26,6 +26,9 @@ class Config:
         self.sender_email = os.getenv('SENDER_EMAIL', 'chen.kelvin822@gmail.com')
         self.sender_name = os.getenv('SENDER_NAME', 'Snowflake CI Monitor')
 
+        # NewsAPI settings
+        self.newsapi_key = os.getenv('NEWSAPI_KEY', 'your_newsapi_key_here')
+
         # Collection settings
         self.lookback_days = int(os.getenv('LOOKBACK_DAYS', '1'))
         self.max_retries = int(os.getenv('MAX_RETRIES', '3'))
@@ -64,6 +67,9 @@ class Config:
         # Load competitors
         self.competitors = self._load_competitors()
 
+        # Load news sources
+        self.news_sources = self._load_news_sources()
+
     def _load_competitors(self) -> List[Dict]:
         """Load competitor definitions from JSON"""
         competitors_file = self.config_dir / 'competitors.json'
@@ -75,6 +81,17 @@ class Config:
         with open(competitors_file, 'r') as f:
             data = json.load(f)
             return data.get('competitors', [])
+
+    def _load_news_sources(self) -> Dict:
+        """Load news sources from JSON"""
+        competitors_file = self.config_dir / 'competitors.json'
+
+        if not competitors_file.exists():
+            return {}
+
+        with open(competitors_file, 'r') as f:
+            data = json.load(f)
+            return data.get('news_sources', {})
 
     def _get_default_competitors(self) -> List[Dict]:
         """Get default competitor list"""

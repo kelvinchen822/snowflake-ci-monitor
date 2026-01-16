@@ -12,6 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from src.config import config
 from src.database import Database
 from src.collectors.rss_collector import RSSCollector
+from src.collectors.hackernews_collector import HackerNewsCollector
+from src.collectors.newsapi_collector import NewsAPICollector
 from src.processors.signal_classifier import SignalClassifier
 from src.processors.deduplicator import Deduplicator
 from src.reporting.report_generator import ReportGenerator
@@ -52,9 +54,10 @@ class CIMonitor:
         session = self.db.get_session()
 
         try:
-            # Get all RSS feeds from database
             from src.database import SignalSource, Competitor
 
+            # 1. Collect from competitor RSS feeds (existing)
+            print("\n[1/4] Collecting from competitor RSS feeds...")
             sources = session.query(SignalSource).filter_by(type='rss').all()
 
             for source in sources:
@@ -76,6 +79,86 @@ class CIMonitor:
                 except Exception as e:
                     print(f"✗ Error collecting from {source.url}: {str(e)}")
                     continue
+
+            print(f"  Collected {len(all_signals)} signals from competitor feeds")
+
+            # 2. Collect from tech news RSS feeds
+            print("\n[2/4] Collecting from tech news RSS feeds...")
+            tech_news_count = 0
+            if hasattr(config, 'news_sources') and 'tech_news_rss' in config.news_sources:
+                for feed_url in config.news_sources['tech_news_rss']:
+                    try:
+                        collector = RSSCollector(
+                            competitor_name='Tech News',
+                            feed_url=feed_url,
+                            lookback_days=config.lookback_days
+                        )
+                        signals = collector.collect()
+                        all_signals.extend(signals)
+                        tech_news_count += len(signals)
+                    except Exception as e:
+                        print(f"✗ Error collecting from {feed_url}: {str(e)}")
+                        continue
+
+            # Also collect from PR Newswire RSS
+            if hasattr(config, 'news_sources') and 'pr_newswire_rss' in config.news_sources:
+                for feed_url in config.news_sources['pr_newswire_rss']:
+                    try:
+                        collector = RSSCollector(
+                            competitor_name='PR Newswire',
+                            feed_url=feed_url,
+                            lookback_days=config.lookback_days
+                        )
+                        signals = collector.collect()
+                        all_signals.extend(signals)
+                        tech_news_count += len(signals)
+                    except Exception as e:
+                        print(f"✗ Error collecting from {feed_url}: {str(e)}")
+                        continue
+
+            print(f"  Collected {tech_news_count} signals from news feeds")
+
+            # 3. Collect from HackerNews
+            print("\n[3/4] Collecting from HackerNews...")
+            hn_count = 0
+            for competitor in config.competitors:
+                try:
+                    collector = HackerNewsCollector(
+                        competitor_name=competitor['name'],
+                        keywords=competitor.get('keywords', []),
+                        lookback_days=config.lookback_days
+                    )
+                    signals = collector.collect()
+                    all_signals.extend(signals)
+                    hn_count += len(signals)
+                except Exception as e:
+                    print(f"✗ Error collecting HN for {competitor['name']}: {str(e)}")
+                    continue
+
+            print(f"  Collected {hn_count} signals from HackerNews")
+
+            # 4. Collect from NewsAPI (if configured)
+            print("\n[4/4] Collecting from NewsAPI...")
+            newsapi_count = 0
+            newsapi_key = config.newsapi_key if hasattr(config, 'newsapi_key') else None
+            if newsapi_key and newsapi_key != 'your_newsapi_key_here':
+                for competitor in config.competitors:
+                    try:
+                        collector = NewsAPICollector(
+                            api_key=newsapi_key,
+                            competitor_name=competitor['name'],
+                            keywords=competitor.get('keywords', []),
+                            lookback_days=config.lookback_days
+                        )
+                        signals = collector.collect()
+                        all_signals.extend(signals)
+                        newsapi_count += len(signals)
+                    except Exception as e:
+                        print(f"✗ Error collecting NewsAPI for {competitor['name']}: {str(e)}")
+                        continue
+                print(f"  Collected {newsapi_count} signals from NewsAPI")
+            else:
+                print("  NewsAPI not configured (set NEWSAPI_KEY to enable)")
 
             print(f"\n✓ Total signals collected: {len(all_signals)}")
             return all_signals

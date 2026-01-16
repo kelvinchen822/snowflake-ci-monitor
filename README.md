@@ -5,7 +5,12 @@ Automated daily monitoring tool that tracks competitive landscape signals across
 ## Features
 
 - 🤖 **Automated Daily Reports** - Delivered to your inbox every morning at 8 AM ET
-- 📊 **Multi-Source Collection** - RSS feeds from competitor blogs and newsrooms
+- 📊 **Multi-Source Collection** - Aggregates from multiple channels:
+  - Company RSS feeds (competitor blogs, newsrooms)
+  - HackerNews API (discussions, launches, Show HN)
+  - Tech news RSS (TechCrunch, VentureBeat, The Verge, etc.)
+  - PR Newswire RSS (press releases)
+  - NewsAPI (optional - 6,000+ news sources)
 - 🎯 **Smart Classification** - Automatically categorizes signals (Product, Partnership, Acquisition, Pricing, Conference)
 - 🔄 **Duplicate Detection** - Hash-based deduplication prevents repeated signals
 - 📧 **Professional Email Reports** - Beautiful HTML emails with color-coded signal types
@@ -66,6 +71,9 @@ Go to your repository on GitHub:
 3. Click **New repository secret** again and add:
    - Name: `RECIPIENT_EMAIL`
    - Value: `chen.kelvin822@gmail.com`
+4. **(Optional)** For NewsAPI integration, add:
+   - Name: `NEWSAPI_KEY`
+   - Value: Your NewsAPI key (see [NEWSAPI_SETUP.md](NEWSAPI_SETUP.md) for instructions)
 
 ### 4. Test Locally (Optional)
 

@@ -37,5 +37,18 @@
       "twitter": "@AWSCloud",
       "keywords": ["Redshift", "Aurora", "Athena", "Glue", "data warehouse", "analytics"]
     }
-  ]
+  ],
+  "news_sources": {
+    "tech_news_rss": [
+      "https://techcrunch.com/feed/",
+      "https://www.theverge.com/rss/index.xml",
+      "https://venturebeat.com/feed/",
+      "https://www.zdnet.com/news/rss.xml",
+      "https://www.infoworld.com/index.rss"
+    ],
+    "pr_newswire_rss": [
+      "https://www.prnewswire.com/rss/technology-latest-news/technology-latest-news-list.rss",
+      "https://www.prnewswire.com/rss/internet-technology-latest-news/internet-technology-latest-news-list.rss"
+    ]
+  }
 }
