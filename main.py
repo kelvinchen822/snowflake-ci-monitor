@@ -12,7 +12,6 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from src.config import config
 from src.database import Database
 from src.collectors.rss_collector import RSSCollector
-from src.collectors.hackernews_collector import HackerNewsCollector
 from src.collectors.newsapi_collector import NewsAPICollector
 from src.processors.signal_classifier import SignalClassifier
 from src.processors.deduplicator import Deduplicator
@@ -57,7 +56,7 @@ class CIMonitor:
             from src.database import SignalSource, Competitor
 
             # 1. Collect from competitor RSS feeds (existing)
-            print("\n[1/4] Collecting from competitor RSS feeds...")
+            print("\n[1/3] Collecting from competitor RSS feeds...")
             sources = session.query(SignalSource).filter_by(type='rss').all()
 
             for source in sources:
@@ -83,7 +82,7 @@ class CIMonitor:
             print(f"  Collected {len(all_signals)} signals from competitor feeds")
 
             # 2. Collect from tech news RSS feeds
-            print("\n[2/4] Collecting from tech news RSS feeds...")
+            print("\n[2/3] Collecting from tech news RSS feeds...")
             tech_news_count = 0
             if hasattr(config, 'news_sources') and 'tech_news_rss' in config.news_sources:
                 for feed_url in config.news_sources['tech_news_rss']:
@@ -118,27 +117,8 @@ class CIMonitor:
 
             print(f"  Collected {tech_news_count} signals from news feeds")
 
-            # 3. Collect from HackerNews
-            print("\n[3/4] Collecting from HackerNews...")
-            hn_count = 0
-            for competitor in config.competitors:
-                try:
-                    collector = HackerNewsCollector(
-                        competitor_name=competitor['name'],
-                        keywords=competitor.get('keywords', []),
-                        lookback_days=config.lookback_days
-                    )
-                    signals = collector.collect()
-                    all_signals.extend(signals)
-                    hn_count += len(signals)
-                except Exception as e:
-                    print(f"✗ Error collecting HN for {competitor['name']}: {str(e)}")
-                    continue
-
-            print(f"  Collected {hn_count} signals from HackerNews")
-
-            # 4. Collect from NewsAPI (if configured)
-            print("\n[4/4] Collecting from NewsAPI...")
+            # 3. Collect from NewsAPI (if configured)
+            print("\n[3/3] Collecting from NewsAPI...")
             newsapi_count = 0
             newsapi_key = config.newsapi_key if hasattr(config, 'newsapi_key') else None
             if newsapi_key and newsapi_key != 'your_newsapi_key_here':

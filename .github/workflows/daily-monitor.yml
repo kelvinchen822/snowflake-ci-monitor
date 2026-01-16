@@ -44,7 +44,7 @@ jobs:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
-          LOOKBACK_DAYS: 7
+          LOOKBACK_DAYS: 1
         run: |
           python main.py
 
