@@ -1,0 +1,32 @@
+{
+  "competitors": [
+    {
+      "name": "Databricks",
+      "domain": "databricks.com",
+      "rss_feeds": ["https://www.databricks.com/blog/feed"],
+      "twitter": "@databricks",
+      "keywords": ["Databricks", "Delta Lake", "lakehouse", "Unity Catalog"]
+    },
+    {
+      "name": "Microsoft Fabric",
+      "domain": "microsoft.com",
+      "rss_feeds": ["https://azure.microsoft.com/en-us/blog/feed/"],
+      "twitter": "@Azure",
+      "keywords": ["Microsoft Fabric", "Azure Synapse", "OneLake", "Power BI"]
+    },
+    {
+      "name": "Google BigQuery",
+      "domain": "cloud.google.com",
+      "rss_feeds": ["https://cloud.google.com/blog/feeds/posts.xml"],
+      "twitter": "@GoogleCloud",
+      "keywords": ["BigQuery", "BigLake", "Vertex AI", "Looker"]
+    },
+    {
+      "name": "Amazon Redshift",
+      "domain": "aws.amazon.com",
+      "rss_feeds": ["https://aws.amazon.com/blogs/aws/feed/"],
+      "twitter": "@AWSCloud",
+      "keywords": ["Redshift", "Aurora", "Athena", "Glue"]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+name: Daily Competitive Intelligence Monitor
+
+on:
+  schedule:
+    # Runs at 12:00 PM UTC (8:00 AM ET) every day
+    - cron: '0 12 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run monitoring pipeline
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: |
+          python main.py
+
+      - name: Commit database updates
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/intelligence.db
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update intelligence database [skip ci]" && git push)
+        continue-on-error: true

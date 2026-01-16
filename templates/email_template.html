@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Intelligence Digest</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #29B5E8 0%, #1E88C7 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .summary h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #495057;
+        }
+        .summary-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 6px;
+            border-left: 4px solid #29B5E8;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #29B5E8;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .competitor-section {
+            margin-bottom: 40px;
+        }
+        .competitor-header {
+            font-size: 22px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #29B5E8;
+        }
+        .no-signals {
+            color: #6c757d;
+            font-style: italic;
+            padding: 10px 0;
+        }
+        .signal {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #dee2e6;
+        }
+        .signal.acquisition {
+            border-left-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        .signal.partnership {
+            border-left-color: #28a745;
+            background-color: #f1f9f3;
+        }
+        .signal.product {
+            border-left-color: #007bff;
+            background-color: #f0f7ff;
+        }
+        .signal.pricing {
+            border-left-color: #ffc107;
+            background-color: #fffdf0;
+        }
+        .signal.conference {
+            border-left-color: #6f42c1;
+            background-color: #f7f4fc;
+        }
+        .signal-type {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .signal-type.acquisition { background-color: #dc3545; color: white; }
+        .signal-type.partnership { background-color: #28a745; color: white; }
+        .signal-type.product { background-color: #007bff; color: white; }
+        .signal-type.pricing { background-color: #ffc107; color: #000; }
+        .signal-type.conference { background-color: #6f42c1; color: white; }
+        .signal-type.general { background-color: #6c757d; color: white; }
+        .signal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0 0 8px 0;
+        }
+        .signal-title a {
+            color: #212529;
+            text-decoration: none;
+        }
+        .signal-title a:hover {
+            color: #29B5E8;
+        }
+        .signal-description {
+            font-size: 14px;
+            color: #495057;
+            line-height: 1.5;
+            margin: 0 0 8px 0;
+        }
+        .signal-meta {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            font-size: 13px;
+            color: #6c757d;
+        }
+        .footer a {
+            color: #29B5E8;
+            text-decoration: none;
+        }
+        @media only screen and (max-width: 600px) {
+            .summary-stats {
+                flex-direction: column;
+            }
+            .stat-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Competitive Intelligence Digest</h1>
+            <p>{{ date_range }}</p>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="summary">
+            <h2>Summary</h2>
+            <div class="summary-stats">
+                {% if stats.acquisition %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.acquisition }}</div>
+                    <div class="stat-label">Acquisitions</div>
+                </div>
+                {% endif %}
+                {% if stats.partnership %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.partnership }}</div>
+                    <div class="stat-label">Partnerships</div>
+                </div>
+                {% endif %}
+                {% if stats.product %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.product }}</div>
+                    <div class="stat-label">Product Updates</div>
+                </div>
+                {% endif %}
+                {% if stats.pricing %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.pricing }}</div>
+                    <div class="stat-label">Pricing Changes</div>
+                </div>
+                {% endif %}
+                {% if stats.conference %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.conference }}</div>
+                    <div class="stat-label">Conference/Events</div>
+                </div>
+                {% endif %}
+                {% if not stats %}
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">New Signals</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            {% for competitor_name, signals in grouped_signals.items() %}
+            <div class="competitor-section">
+                <h2 class="competitor-header">{{ competitor_name }}</h2>
+
+                {% if signals %}
+                    {% for signal in signals %}
+                    <div class="signal {{ signal.signal_type }}">
+                        <span class="signal-type {{ signal.signal_type }}">{{ signal.signal_type }}</span>
+                        <h3 class="signal-title">
+                            <a href="{{ signal.url }}" target="_blank">{{ signal.title }}</a>
+                        </h3>
+                        {% if signal.description %}
+                        <p class="signal-description">{{ signal.description }}</p>
+                        {% endif %}
+                        <div class="signal-meta">
+                            {{ signal.published_date.strftime('%B %d, %Y') if signal.published_date else 'Date unknown' }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-signals">No new signals detected in the last 24 hours</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                Automated by Snowflake CI Monitor<br>
+                Tracking: Databricks, Microsoft Fabric, Google BigQuery, Amazon Redshift
+            </p>
+        </div>
+    </div>
+</body>
+</html>
