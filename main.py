@@ -213,6 +213,12 @@ class CIMonitor:
                 print("\n✗ Configuration validation failed")
                 return False
 
+            # Auto-initialize database if it doesn't exist
+            db_path = Path(config.data_dir) / 'intelligence.db'
+            if not db_path.exists():
+                print("\n✓ Database not found, initializing automatically...")
+                self.initialize_database()
+
             if not test_mode:
                 # Collect signals
                 signals = self.collect_signals()
