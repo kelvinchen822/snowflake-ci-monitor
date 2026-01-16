@@ -67,7 +67,8 @@ class RSSCollector(BaseCollector):
                 'url': entry.get('link', ''),
                 'published_date': published_date,
                 'source_type': 'rss',
-                'source_url': self.source_url
+                'source_url': self.source_url,
+                'competitor_name': self.competitor_name
             }
 
             return self.normalize_signal(signal)

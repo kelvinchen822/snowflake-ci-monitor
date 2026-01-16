@@ -110,18 +110,17 @@ class CIMonitor:
 
             # Store new signals
             for signal_data in signals:
-                # Find competitor
+                # Find competitor by name
                 competitor_name = signal_data.get('competitor_name', '')
 
-                # Try to match competitor by checking if competitor name appears in source URL or content
-                competitor = None
-                for comp in config.competitors:
-                    if comp['name'].lower() in str(signal_data.get('source_url', '')).lower():
-                        competitor = session.query(Competitor).filter_by(name=comp['name']).first()
-                        break
+                if not competitor_name:
+                    print(f"Warning: No competitor name for signal: {signal_data['title'][:50]}")
+                    continue
+
+                competitor = session.query(Competitor).filter_by(name=competitor_name).first()
 
                 if not competitor:
-                    print(f"Warning: Could not match competitor for signal: {signal_data['title'][:50]}")
+                    print(f"Warning: Could not find competitor '{competitor_name}' for signal: {signal_data['title'][:50]}")
                     continue
 
                 # Create signal
