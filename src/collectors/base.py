@@ -57,7 +57,8 @@ class BaseCollector(ABC):
             'url': raw_signal.get('url', '').strip(),
             'published_date': raw_signal.get('published_date'),
             'source_type': raw_signal.get('source_type', 'unknown'),
-            'source_url': self.source_url
+            'source_url': self.source_url,
+            'competitor_name': raw_signal.get('competitor_name', '')
         }
 
     def filter_by_date(self, signals: List[Dict], lookback_days: int = 1) -> List[Dict]:
