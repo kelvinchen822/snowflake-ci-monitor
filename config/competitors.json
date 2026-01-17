@@ -5,7 +5,7 @@
       "domain": "databricks.com",
       "rss_feeds": ["https://www.databricks.com/blog/feed"],
       "twitter": "@databricks",
-      "keywords": ["Databricks", "Delta Lake", "lakehouse", "Unity Catalog", "MLflow"]
+      "keywords": ["Databricks", "Delta Lake", "lakehouse", "Unity Catalog"]
     },
     {
       "name": "Microsoft Fabric",
