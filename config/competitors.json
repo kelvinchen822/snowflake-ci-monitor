@@ -36,6 +36,15 @@
       ],
       "twitter": "@AWSCloud",
       "keywords": ["Redshift", "Aurora", "Athena", "Glue", "data warehouse", "analytics"]
+    },
+    {
+      "name": "ClickHouse",
+      "domain": "clickhouse.com",
+      "rss_feeds": [
+        "https://clickhouse.com/blog/rss.xml"
+      ],
+      "twitter": "@ClickHouseDB",
+      "keywords": ["ClickHouse", "ClickHouse Cloud", "OLAP", "real-time analytics"]
     }
   ],
   "news_sources": {
